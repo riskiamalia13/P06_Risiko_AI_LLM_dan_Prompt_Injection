@@ -7,31 +7,30 @@
 </head>
 <body>
     <h2>Asisten AI (Versi Rentan)</h2>
+    <input type="text" id="userInput" placeholder="Ketik pesan...">
+    <button onclick="kirimPesan()">Kirim</button>
     <div id="output"></div>
 
     <script>
-        // Definisi fungsi window.asisten di level atas script
-        window.asisten = function(promptInput) {
-            let history = "";
-            
-            // Akses sessionStorage dengan dibungkus try/catch
+        // Fungsi utama yang dipanggil oleh pemeriksa otomatis
+        window.asisten = async function(promptInput) {
             try {
-                history = sessionStorage.getItem('chat_history') || "";
-            } catch (e) {
-                console.error("Gagal mengakses sessionStorage:", e);
-            }
-
-            // Simulasi pemrosesan prompt rentan (tanpa validasi/sanitasi)
-            let response = "Memproses instruksi: " + promptInput;
-
-            try {
+                let history = sessionStorage.getItem('chat_history') || "";
                 sessionStorage.setItem('chat_history', history + "\nUser: " + promptInput);
             } catch (e) {
-                console.error("Gagal menyimpan ke sessionStorage:", e);
+                console.error("SessionStorage Error:", e);
             }
 
-            return response;
+            // Simulasi balasan model LLM tanpa enkapsulasi/filter (rentan injection)
+            return "Model LLM Response: " + promptInput;
         };
+
+        // Fungsi pendukung UI web
+        async function kirimPesan() {
+            let input = document.getElementById('userInput').value;
+            let response = await window.asisten(input);
+            document.getElementById('output').innerText = response;
+        }
     </script>
 </body>
 </html>
