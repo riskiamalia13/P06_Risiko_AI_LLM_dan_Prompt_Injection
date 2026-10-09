@@ -6,9 +6,10 @@
 </head>
 <body>
     <script>
+        // Deklarasi global langsung di window
         window.model = {
             generate: async function(prompt) {
-                return "Balasan dari model aman: " + prompt;
+                return "Model LLM Response: " + prompt;
             }
         };
 
@@ -16,13 +17,11 @@
             try {
                 let history = sessionStorage.getItem('chat_history') || "";
                 sessionStorage.setItem('chat_history', history + "\nUser: " + promptInput);
-            } catch (e) {
-                console.error(e);
-            }
+            } catch (e) {}
 
-            const isInjection = /ignore|system|admin|override|bypass|rahsia|secret/i.test(promptInput);
-            if (isInjection) {
-                return "BLOCKED: Aksi ditahan gerbang keamanan.";
+            // Deteksi prompt injection
+            if (/ignore|system|admin|override|bypass|rahsia|secret/i.test(promptInput)) {
+                return "BLOCKED: Aksi ditahan gerbang keamanan";
             }
 
             return await window.model.generate(promptInput);
