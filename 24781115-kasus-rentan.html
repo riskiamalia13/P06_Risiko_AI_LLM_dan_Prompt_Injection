@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kasus Rentan - Prompt Injection</title>
+</head>
+<body>
+    <h2>Asisten AI (Versi Rentan)</h2>
+    <div id="output"></div>
+
+    <script>
+        // Definisi fungsi window.asisten di level atas script
+        window.asisten = function(promptInput) {
+            let history = "";
+            
+            // Akses sessionStorage dengan dibungkus try/catch
+            try {
+                history = sessionStorage.getItem('chat_history') || "";
+            } catch (e) {
+                console.error("Gagal mengakses sessionStorage:", e);
+            }
+
+            // Simulasi pemrosesan prompt rentan (tanpa validasi/sanitasi)
+            let response = "Memproses instruksi: " + promptInput;
+
+            try {
+                sessionStorage.setItem('chat_history', history + "\nUser: " + promptInput);
+            } catch (e) {
+                console.error("Gagal menyimpan ke sessionStorage:", e);
+            }
+
+            return response;
+        };
+    </script>
+</body>
+</html>

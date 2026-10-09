@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kasus Aman - Prompt Injection</title>
+</head>
+<body>
+    <h2>Asisten AI (Versi Aman)</h2>
+    <div id="output"></div>
+
+    <script>
+        // Definisi fungsi window.asisten di level atas script
+        window.asisten = function(promptInput) {
+            let history = "";
+
+            // Akses sessionStorage dengan dibungkus try/catch
+            try {
+                history = sessionStorage.getItem('chat_history') || "";
+            } catch (e) {
+                console.error("Gagal mengakses sessionStorage:", e);
+            }
+
+            // Sanitasi dan validasi input untuk mencegah prompt injection
+            let sanitizedInput = String(promptInput).replace(/[<>&"']/g, "");
+            let response = "Memproses instruksi aman: " + sanitizedInput;
+
+            try {
+                sessionStorage.setItem('chat_history', history + "\nUser: " + sanitizedInput);
+            } catch (e) {
+                console.error("Gagal menyimpan ke sessionStorage:", e);
+            }
+
+            return response;
+        };
+    </script>
+</body>
+</html>
